@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Yudao Doc Reader
 // @namespace    https://greasyfork.org/zh-CN/users/60193
-// @version      1.1.0
+// @version      1.1.1
 // @license      MIT
 // @description  芋道源码文档阅读辅助：修复 iocoder.cn 文档页面的正文显示与排版，提供更稳定的阅读与目录导航体验（ruoyi-vue-pro / yudao-cloud），纯前端 DOM 调整。
 // @author       李广妮
@@ -13,20 +13,6 @@
 // @noframes
 // ==/UserScript==
 
-/*
- * 站点门禁(逆向 doc.iocoder.cn/assets/js/app.*.js, 挂在 router.afterEach, 每次跳转都会执行):
- *   A. 2026-11-23 版: jQuery 改写正文
- *        $(".content-wrapper").html('仅 VIP 可见！')   立即一次
- *        + 2 秒内每 100ms 重写一次(共 20 次)
- *        + jqueryAlert 弹窗(.alert-modal/.alert-container, answer.js)
- *        + body overflow 锁定
- *      对策: 钩住 window.jQuery/$ 的赋值, 给 fn.html 打补丁,
- *      含"仅 VIP"的改写一律吞掉 → 正文根本不被破坏, 无闪烁;
- *      快照 + 还原作为钩子失效时的兜底; 弹窗移除 + 首帧 CSS。
- *   B. 旧版机制(可能回归): <html data-doc-access="guest"> + visibility:hidden CSS,
- *      正文容器首帧被隐藏后布局盒子永久冻结(改回 visible 高度也恒为 0)。
- *      对策: 属性锁回 verified; 正文搬进不带 .content-wrapper 的新容器。
- */
 
 (function () {
     'use strict';
